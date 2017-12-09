@@ -2,14 +2,13 @@ package com.nyf.uneasyguys.test;
 
 
 import android.app.ActionBar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-
+import android.app.ActionBar.Tab;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +24,13 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolBar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolBar);
+
+        TabLayout tabLayout= (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout.addTab(tabLayout.newTab().setText("카메라"));
+        tabLayout.addTab(tabLayout.newTab().setText("지도"));
+        tabLayout.addTab(tabLayout.newTab().setText("통계"));
 
         // ViewPager and its adapters use support library
         // fragments, so use getSupportFragmentManager.
@@ -35,75 +41,34 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setAdapter(mDemoCollectionPagerAdapter);
 
         // Specify that tabs should be displayed in the action bar.
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+//        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        // Create a tab listener that is called when the user changes tabs.
-        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
-            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-                // show the given tab
-            }
 
-            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-                // hide the given tab
-            }
+        mViewPager.addOnPageChangeListener(new
+                TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.setOnTabSelectedListener(new
+                                                   TabLayout.OnTabSelectedListener() {
+                                                       @Override
+                                                       public void onTabSelected(TabLayout.Tab tab) {
+                                                           mViewPager.setCurrentItem(tab.getPosition());
 
-            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-                // probably ignore this event
-            }
-        };
+                                                       }
+
+                                                       @Override
+                                                       public void onTabUnselected(TabLayout.Tab tab) {
+
+                                                       }
+
+                                                       @Override
+                                                       public void onTabReselected(TabLayout.Tab tab) {
+
+                                                       }
+
+                                                   });
+
 
         // Add 3 tabs, specifying the tab's text and TabListener
-        for (int i = 0; i < 3; i++) {
-            actionBar.addTab(
-                    actionBar.newTab()
-                            .setText("Tab " + (i + 1))
-                            .setTabListener(tabListener));
-        }
 
 
-    }
-}
-class DemoCollectionPagerAdapter extends FragmentStatePagerAdapter {
-    public DemoCollectionPagerAdapter(FragmentManager fm) {
-        super(fm);
-    }
-
-    @Override
-    public Fragment getItem(int i) {
-        Fragment fragment = new DemoObjectFragment();
-        Bundle args = new Bundle();
-        // Our object is just an integer :-P
-        args.putInt(DemoObjectFragment.ARG_OBJECT, i + 1);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public int getCount() {
-        return 100;
-    }
-
-    @Override
-    public CharSequence getPageTitle(int position) {
-        return "OBJECT " + (position + 1);
-    }
-}
-
-// Instances of this class are fragments representing a single
-// object in our collection.
-public class DemoObjectFragment extends Fragment {
-    public static final String ARG_OBJECT = "object";
-
-    @Override
-    public View onCreateView(LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        // The last two arguments ensure LayoutParams are inflated
-        // properly.
-        View rootView = inflater.inflate(
-                R.layout.fragment_collection_object, container, false);
-        Bundle args = getArguments();
-        ((TextView) rootView.findViewById(android.R.id.text1)).setText(
-                Integer.toString(args.getInt(ARG_OBJECT)));
-        return rootView;
     }
 }
