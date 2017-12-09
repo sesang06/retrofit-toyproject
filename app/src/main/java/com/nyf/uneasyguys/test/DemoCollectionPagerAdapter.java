@@ -18,23 +18,38 @@ public DemoCollectionPagerAdapter(FragmentManager fm) {
 
 @Override
 public Fragment getItem(int i) {
-        Fragment fragment = new DemoObjectFragment();
-        Bundle args = new Bundle();
+        Fragment fragment;
+        switch (i){
+                case 0:
+                        fragment = new CameraFragment();
+                        return fragment;
+                case 1:
+                        fragment = new MapFragment();
+                        return fragment;
+
+                case 2:
+                        fragment = new StatisticsFragment();
+                        return fragment;
+                default:
+                        fragment = new DemoObjectFragment();
+                        return fragment;
+        }
+
+        /*Bundle args = new Bundle();
         // Our object is just an integer :-P
         args.putInt(DemoObjectFragment.ARG_OBJECT, i + 1);
+
         fragment.setArguments(args);
-        return fragment;
+        */
+
         }
 
 @Override
 public int getCount() {
-        return 100;
+        return 3;
         }
 
-@Override
-public CharSequence getPageTitle(int position) {
-        return "OBJECT " + (position + 1);
-        }
+
         }
 
 
