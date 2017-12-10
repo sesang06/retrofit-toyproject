@@ -34,10 +34,7 @@ import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraDevice;
 import android.hardware.camera2.CameraManager;
-import android.hardware.camera2.CameraMetadata;
 import android.hardware.camera2.CaptureRequest;
-import android.hardware.camera2.CaptureResult;
-import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
@@ -48,7 +45,10 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -94,31 +94,6 @@ public class CameraFragment extends Fragment
      * Tag for the {@link Log}.
      */
     private static final String TAG = "CameraFragment";
-
-    /**
-     * Camera state: Showing camera preview.
-     */
-    private static final int STATE_PREVIEW = 0;
-
-    /**
-     * Camera state: Waiting for the focus to be locked.
-     */
-    private static final int STATE_WAITING_LOCK = 1;
-
-    /**
-     * Camera state: Waiting for the exposure to be precapture state.
-     */
-    private static final int STATE_WAITING_PRECAPTURE = 2;
-
-    /**
-     * Camera state: Waiting for the exposure state to be something other than precapture.
-     */
-    private static final int STATE_WAITING_NON_PRECAPTURE = 3;
-
-    /**
-     * Camera state: Picture was taken.
-     */
-    private static final int STATE_PICTURE_TAKEN = 4;
 
     /**
      * Max preview width that is guaranteed by Camera2 API
@@ -896,12 +871,15 @@ public class CameraFragment extends Fragment
     };
 
     /**
-     * To handle button click (will be updated)
+     * Change current fragment to {@link MapFragment}
+     * Using {@link MainActivity#mViewPager}
      */
     View.OnClickListener onClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            //TODO
+            MainActivity activity = (MainActivity) getActivity();
+            ViewPager mViewPager = activity.mViewPager;
+            mViewPager.setCurrentItem(1);
         }
     };
 }
