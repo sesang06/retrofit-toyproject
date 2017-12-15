@@ -60,6 +60,8 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import com.nyf.uneasyguys.test.Fragment.MapFragment;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;

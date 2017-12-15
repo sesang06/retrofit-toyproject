@@ -1,4 +1,4 @@
-package com.nyf.uneasyguys.test;
+package com.nyf.uneasyguys.test.Fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,12 +12,13 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.nyf.uneasyguys.test.R;
 
 /**
  * Created by sesan on 2017-12-09.
  */
 
-public class MapFragment extends DemoObjectFragment implements OnMapReadyCallback{
+public class MapFragment extends BaseFragment implements OnMapReadyCallback{
     private MapView mapView =null;
 
         @Override

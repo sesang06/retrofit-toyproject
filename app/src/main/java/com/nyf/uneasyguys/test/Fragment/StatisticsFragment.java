@@ -1,15 +1,18 @@
-package com.nyf.uneasyguys.test;
+package com.nyf.uneasyguys.test.Fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.nyf.uneasyguys.test.Fragment.BaseFragment;
+import com.nyf.uneasyguys.test.R;
+
 /**
  * Created by sesan on 2017-12-09.
  */
 
-public class StatisticsFragment extends DemoObjectFragment {
+public class StatisticsFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {

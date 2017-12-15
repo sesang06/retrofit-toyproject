@@ -1,4 +1,4 @@
-package com.nyf.uneasyguys.test;
+package com.nyf.uneasyguys.test.Fragment;
 
 
 import android.os.Bundle;
@@ -8,11 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.nyf.uneasyguys.test.R;
+
 /**
  * Created by sesan on 2017-12-09.
  */
 
-public class DemoObjectFragment  extends Fragment {
+public class BaseFragment extends Fragment {
     public static final String ARG_OBJECT = "object";
 
     @Override

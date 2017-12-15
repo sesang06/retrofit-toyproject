@@ -1,18 +1,18 @@
 package com.nyf.uneasyguys.test;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+
+import com.nyf.uneasyguys.test.Fragment.BaseFragment;
+import com.nyf.uneasyguys.test.Fragment.MapFragment;
+import com.nyf.uneasyguys.test.Fragment.StatisticsFragment;
+
 /**
  * Created by sesan on 2017-12-09.
  */
 
-public class  DemoCollectionPagerAdapter extends FragmentStatePagerAdapter {
-public DemoCollectionPagerAdapter(FragmentManager fm) {
+public class BaseFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
+public BaseFragmentStatePagerAdapter(FragmentManager fm) {
         super(fm);
         }
 
@@ -31,13 +31,13 @@ public Fragment getItem(int i) {
                         fragment = new StatisticsFragment();
                         return fragment;
                 default:
-                        fragment = new DemoObjectFragment();
+                        fragment = new BaseFragment();
                         return fragment;
         }
 
         /*Bundle args = new Bundle();
         // Our object is just an integer :-P
-        args.putInt(DemoObjectFragment.ARG_OBJECT, i + 1);
+        args.putInt(BaseFragment.ARG_OBJECT, i + 1);
 
         fragment.setArguments(args);
         */

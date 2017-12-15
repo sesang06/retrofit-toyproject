@@ -3,19 +3,13 @@ package com.nyf.uneasyguys.test;
 
 import android.app.ActionBar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.app.ActionBar.Tab;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-    DemoCollectionPagerAdapter mDemoCollectionPagerAdapter;
+    BaseFragmentStatePagerAdapter mBaseFragmentStatePagerAdapter;
     ViewPager mViewPager;
 
     @Override
@@ -34,11 +28,11 @@ public class MainActivity extends AppCompatActivity {
 
         // ViewPager and its adapters use support library
         // fragments, so use getSupportFragmentManager.
-        mDemoCollectionPagerAdapter =
-                new DemoCollectionPagerAdapter(
+        mBaseFragmentStatePagerAdapter =
+                new BaseFragmentStatePagerAdapter(
                         getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.main_pager);
-        mViewPager.setAdapter(mDemoCollectionPagerAdapter);
+        mViewPager.setAdapter(mBaseFragmentStatePagerAdapter);
 
         // Specify that tabs should be displayed in the action bar.
 //        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
