@@ -1,6 +1,8 @@
 package com.nyf.uneasyguys.test.Fragment;
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,11 @@ import com.nyf.uneasyguys.test.R;
  */
 
 public class StatisticsFragment extends BaseFragment {
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -21,6 +28,14 @@ public class StatisticsFragment extends BaseFragment {
         View rootView = inflater.inflate(
                 R.layout.fragment_statistics, container, false);
         Bundle args = getArguments();
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.fragment_statistics_recycler_view);
+
+        mRecyclerView.setHasFixedSize(true);
+
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+
         return rootView;
     }
 }

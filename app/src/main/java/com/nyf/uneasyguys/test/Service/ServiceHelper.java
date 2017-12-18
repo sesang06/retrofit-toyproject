@@ -18,7 +18,7 @@ package com.nyf.uneasyguys.test.Service;
 
 public class ServiceHelper {
 
-    private static final String ENDPOINT = "http://test.com";
+    private static final String ENDPOINT = "http://ec2-13-125-11-141.ap-northeast-2.compute.amazonaws.com:8000/";
 
     private static OkHttpClient httpClient = new OkHttpClient();
     private static ServiceHelper instance = new ServiceHelper();
