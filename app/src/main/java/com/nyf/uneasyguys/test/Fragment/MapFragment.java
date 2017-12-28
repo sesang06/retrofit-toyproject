@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,7 +22,8 @@ import com.nyf.uneasyguys.test.R;
 
 public class MapFragment extends BaseFragment implements OnMapReadyCallback{
     private MapView mapView =null;
-
+    private Button addAddressButton;
+    private TextView addressTextView;
         @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -31,8 +34,17 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback{
             mapView = (MapView)rootView.findViewById(R.id.map);
             mapView.getMapAsync(this);
 
+            addAddressButton = (Button)rootView.findViewById(R.id.map_button);
+            addressTextView = (TextView)rootView.findViewById(R.id.map_address);
+            addAddressButton.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
 
+                                                    }
+                                                }
+            );
         Bundle args = getArguments();
+
         return rootView;
     }
     @Override
