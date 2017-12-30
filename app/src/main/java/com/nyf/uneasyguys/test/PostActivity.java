@@ -63,6 +63,7 @@ public class PostActivity extends AppCompatActivity {
             alertDialog.show();
             return;
         }
+        /*
         ServiceHelper.getInstance().postArticle(1000000002,postTextString).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
@@ -80,7 +81,7 @@ public class PostActivity extends AppCompatActivity {
             public void onFailure(Call<String> call, Throwable t) {
 
             }
-        });
+        });*/
         ServiceHelper.getInstance().getAllCategory().enqueue(new Callback<List<ArticleModel>>() {
             @Override
             public void onResponse(Call<List<ArticleModel>> call, Response<List<ArticleModel>> response) {
@@ -90,10 +91,30 @@ public class PostActivity extends AppCompatActivity {
                     System.out.println(articleModel.getText());
 
                 }
+                System.out.print(response.headers());
             }
 
             @Override
             public void onFailure(Call<List<ArticleModel>> call, Throwable t) {
+
+            }
+        });
+        ServiceHelper.getInstance().postPoint(13,45).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                System.out.println(response.headers());
+
+                if (response.body() != null) {
+                    Log.d("response: " , response.body());
+                }
+                if (response.errorBody() != null) {
+                    Log.d("response: " , response.errorBody().toString());
+                }
+                System.out.println(response.message());
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
 
             }
         });
