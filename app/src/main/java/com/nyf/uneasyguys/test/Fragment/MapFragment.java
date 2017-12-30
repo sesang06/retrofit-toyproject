@@ -1,5 +1,6 @@
 package com.nyf.uneasyguys.test.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -14,7 +15,10 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.nyf.uneasyguys.test.PostActivity;
 import com.nyf.uneasyguys.test.R;
+
+import retrofit2.http.POST;
 
 /**
  * Created by sesan on 2017-12-09.
@@ -29,7 +33,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback{
                              ViewGroup container, Bundle savedInstanceState) {
         // The last two arguments ensure LayoutParams are inflated
         // properly.
-        View rootView = inflater.inflate(
+        final View rootView = inflater.inflate(
                 R.layout.fragment_map, container, false);
             mapView = (MapView)rootView.findViewById(R.id.map);
             mapView.getMapAsync(this);
@@ -39,7 +43,8 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback{
             addAddressButton.setOnClickListener(new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {
-
+                                                        Intent intent = new Intent(rootView.getContext(), PostActivity.class);
+                                                                startActivity(intent);
                                                     }
                                                 }
             );

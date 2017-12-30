@@ -13,6 +13,6 @@ import retrofit2.http.GET;
 
 public interface IPlusService {
     //@Headers( "Content-Type: application/json" ) in Post method may use this
-    @GET("/api/category")
+    @GET("/article")
     Call<List<ArticleModel>> getAllCategory();
 }
