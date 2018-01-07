@@ -19,7 +19,7 @@ import retrofit2.http.POST;
  */
 
 public interface PointPostService {
-    @Headers("Content-Type: application/json")
-    @POST("/point")
-    Call<String> postPoint(@Body String pointModel);
+    @FormUrlEncoded
+    @POST("/point/")
+    Call<String> postPoint(@Field("point_x") long point_x, @Field("point_y") long point_y);
 }

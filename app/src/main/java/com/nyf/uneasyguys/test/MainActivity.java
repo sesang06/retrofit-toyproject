@@ -2,15 +2,33 @@ package com.nyf.uneasyguys.test;
 
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
+import com.nyf.uneasyguys.test.Fragment.StatisticsFragment;
+
 public class MainActivity extends AppCompatActivity {
     BaseFragmentStatePagerAdapter mBaseFragmentStatePagerAdapter;
     ViewPager mViewPager;
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        System.out.println("requestCode"+ requestCode);
+        if (requestCode == 1) {
+
+            if (resultCode == RESULT_OK) {
+
+                mViewPager.setCurrentItem(2);
+                ((StatisticsFragment)mBaseFragmentStatePagerAdapter.getCurrentFragment()).refresh();
+
+            }
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout= (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("카메라"));
         tabLayout.addTab(tabLayout.newTab().setText("지도"));
-        tabLayout.addTab(tabLayout.newTab().setText("통계"));
+        tabLayout.addTab(tabLayout.newTab().setText("요약"));
 
         // ViewPager and its adapters use support library
         // fragments, so use getSupportFragmentManager.

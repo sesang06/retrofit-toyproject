@@ -8,6 +8,7 @@ package com.nyf.uneasyguys.test.Service;
         import java.util.List;
         import java.util.concurrent.TimeUnit;
 
+        import okhttp3.Credentials;
         import okhttp3.OkHttpClient;
         import okhttp3.logging.HttpLoggingInterceptor;
         import retrofit2.Call;
@@ -34,6 +35,7 @@ public class ServiceHelper {
         service = retrofit.create(IPlusService.class);
         articlePostService = retrofit.create(ArticlePostService.class);
         pointPostService = retrofit.create(PointPostService.class);
+
     }
 
     public static ServiceHelper getInstance() {
@@ -41,11 +43,20 @@ public class ServiceHelper {
     }
 
     private Retrofit.Builder createAdapter() {
-/*
+
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        httpClient.interceptors().add(interceptor);
-*/
+
+        String username = "admin";
+        String password = "1";
+        String authToken = Credentials.basic(username, password);
+        AuthenticationInterceptor authinterceptor = new AuthenticationInterceptor(authToken);
+        httpClient = new OkHttpClient.Builder().addInterceptor(authinterceptor).addInterceptor(interceptor).build();
+        /*
+        if (!httpClient.interceptors().contains(interceptor)){
+            httpClient.interceptors().add(interceptor);
+        }*/
+
         return new Retrofit.Builder()
                 .baseUrl(ENDPOINT)
                 .client(httpClient)
@@ -55,10 +66,9 @@ public class ServiceHelper {
     public Call<String> postPoint(int point_x, int point_y) {
         PointModel pointModel = new PointModel(point_x,point_y);
         String object = gson.toJson(pointModel);
-        System.out.println(object);
-        return pointPostService.postPoint(object);}
+        return pointPostService.postPoint(point_x,point_y);}
 
-    public Call<String> postArticle(long point, String text) {return articlePostService.postArticle(point, text);}
+    public Call<ArticleModel> postArticle(long point, String text) {return articlePostService.postArticle(point, text);}
     public Call<List<ArticleModel>> getAllCategory() {
         return service.getAllCategory();
     }

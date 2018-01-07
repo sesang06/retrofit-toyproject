@@ -1,5 +1,7 @@
 package com.nyf.uneasyguys.test.Service;
 
+import android.support.annotation.FractionRes;
+
 import com.nyf.uneasyguys.test.Model.ArticleModel;
 import com.nyf.uneasyguys.test.Model.UserModel;
 
@@ -14,6 +16,6 @@ import retrofit2.http.POST;
 
 public interface ArticlePostService {
     @FormUrlEncoded
-    @POST("/article")
-    Call<String> postArticle(@Field("point") long point, @Field("text") String text);
+    @POST("/article/")
+    Call<ArticleModel> postArticle(@Field("point") long point, @Field("text") String text);
 }

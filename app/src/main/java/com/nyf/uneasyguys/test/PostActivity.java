@@ -1,10 +1,15 @@
 package com.nyf.uneasyguys.test;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,25 +31,53 @@ import static android.view.View.*;
  */
 
 public class PostActivity extends AppCompatActivity {
-    private Button postSaveButton;
+
     private EditText postEditText;
     private TextView postAddressText;
-
+    private long point_x;
+    private long point_y;
+    private ProgressDialog progressDialog = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
-        postSaveButton = findViewById(R.id.post_save_button);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("포스트");
         postEditText = findViewById(R.id.post_edit_text);
         postAddressText = findViewById(R.id.post_address_text);
+        Intent intent = new Intent(this.getIntent());
 
-        postSaveButton.setOnClickListener(new OnClickListener() {
-                                              @Override
-                                              public void onClick(View view) {
-                                                postAddress();
-                                              }
-                                          }
-        );
+        point_x=   intent.getLongExtra("point_x", 0);
+        point_y=   intent.getLongExtra("point_y", 0);
+        postAddressText.setText("point_x : "+point_x+" point_y: "+point_y);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_post, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+        switch (id){
+            case android.R.id.home :
+                finish();
+                return true;
+            case R.id.menu_post:
+                postAddress();
+                return true;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void finishActivity(){
+        Intent returnIntent = new Intent();
+        setResult(Activity.RESULT_OK, returnIntent);
+        finish();
     }
     private void postAddress(){
         String postTextString = postEditText.getText().toString();
@@ -63,60 +96,31 @@ public class PostActivity extends AppCompatActivity {
             alertDialog.show();
             return;
         }
-        /*
-        ServiceHelper.getInstance().postArticle(1000000002,postTextString).enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if (response.body() != null) {
-                    Log.d("response: " , response.body());
-                }
-                if (response.errorBody() != null) {
-                    Log.d("response: " , response.errorBody().toString());
-                }
-                System.out.println(response.message());
+        progressDialog = ProgressDialog.show(this,"포스트 중...", "", true);
 
+        ServiceHelper.getInstance().postArticle(point_x * 1000000000 + point_y,postTextString).enqueue(new Callback<ArticleModel>() {
+            @Override
+            public void onResponse(Call<ArticleModel> call, Response<ArticleModel> response) {
+
+                System.out.println("response success");
+                if (progressDialog != null){
+                    progressDialog.dismiss();
+                }
+
+                finishActivity();
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
-
-            }
-        });*/
-        ServiceHelper.getInstance().getAllCategory().enqueue(new Callback<List<ArticleModel>>() {
-            @Override
-            public void onResponse(Call<List<ArticleModel>> call, Response<List<ArticleModel>> response) {
-                System.out.println(response.body().size());
-                List<ArticleModel> articleModels = response.body();
-                for (ArticleModel articleModel : articleModels){
-                    System.out.println(articleModel.getText());
-
+            public void onFailure(Call<ArticleModel> call, Throwable t) {
+                if (progressDialog != null){
+                    progressDialog.dismiss();
                 }
-                System.out.print(response.headers());
-            }
-
-            @Override
-            public void onFailure(Call<List<ArticleModel>> call, Throwable t) {
+                    Log.d("response fail: ", "");
 
             }
         });
-        ServiceHelper.getInstance().postPoint(13,45).enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                System.out.println(response.headers());
 
-                if (response.body() != null) {
-                    Log.d("response: " , response.body());
-                }
-                if (response.errorBody() != null) {
-                    Log.d("response: " , response.errorBody().toString());
-                }
-                System.out.println(response.message());
-            }
 
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
 
-            }
-        });
     }
 }

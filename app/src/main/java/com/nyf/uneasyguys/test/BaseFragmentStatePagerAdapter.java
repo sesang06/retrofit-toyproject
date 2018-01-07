@@ -2,6 +2,7 @@ package com.nyf.uneasyguys.test;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.view.ViewGroup;
 
 import com.nyf.uneasyguys.test.Fragment.BaseFragment;
 import com.nyf.uneasyguys.test.Fragment.MapFragment;
@@ -15,7 +16,17 @@ public class BaseFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
 public BaseFragmentStatePagerAdapter(FragmentManager fm) {
         super(fm);
         }
-
+private Fragment mCurrentFragment;
+public Fragment getCurrentFragment(){
+        return mCurrentFragment;
+}
+        @Override
+        public void setPrimaryItem(ViewGroup container, int position, Object object) {
+                if (getCurrentFragment() != object) {
+                        mCurrentFragment = ((Fragment) object);
+                }
+                super.setPrimaryItem(container, position, object);
+        }
 @Override
 public Fragment getItem(int i) {
         Fragment fragment;
