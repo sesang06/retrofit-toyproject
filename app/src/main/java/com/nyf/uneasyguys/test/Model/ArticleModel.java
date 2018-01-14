@@ -1,5 +1,7 @@
 package com.nyf.uneasyguys.test.Model;
 
+import com.nyf.uneasyguys.test.Service.DateService;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -26,7 +28,7 @@ public class ArticleModel {
     public int getId(){ return  id;}
     public UserModel getOwner(){ return  owner;}
     public String getCreatedTime(){
-        return created_time;
+        return DateService.getUserFriendlyDate(created_time);
     }
     public String getUpdatedTime(){
         return  updated_time;

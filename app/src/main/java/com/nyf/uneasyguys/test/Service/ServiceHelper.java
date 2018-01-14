@@ -1,12 +1,10 @@
 package com.nyf.uneasyguys.test.Service;
 
         import com.google.gson.Gson;
-        import com.google.gson.JsonObject;
         import com.nyf.uneasyguys.test.Model.ArticleModel;
         import com.nyf.uneasyguys.test.Model.PointModel;
 
         import java.util.List;
-        import java.util.concurrent.TimeUnit;
 
         import okhttp3.Credentials;
         import okhttp3.OkHttpClient;
@@ -26,15 +24,17 @@ public class ServiceHelper {
     private Gson gson = new Gson();
     private static OkHttpClient httpClient = new OkHttpClient();
     private static ServiceHelper instance = new ServiceHelper();
-    private IPlusService service;
+    private ArticlesGetService articlesGetservice;
     private ArticlePostService articlePostService;
     private PointPostService pointPostService;
+    private ArticleGetService articleGetService;
     private ServiceHelper() {
 
         Retrofit retrofit = createAdapter().build();
-        service = retrofit.create(IPlusService.class);
+        articlesGetservice = retrofit.create(ArticlesGetService.class);
         articlePostService = retrofit.create(ArticlePostService.class);
         pointPostService = retrofit.create(PointPostService.class);
+        articleGetService = retrofit.create(ArticleGetService.class);
 
     }
 
@@ -67,9 +67,9 @@ public class ServiceHelper {
         PointModel pointModel = new PointModel(point_x,point_y);
         String object = gson.toJson(pointModel);
         return pointPostService.postPoint(point_x,point_y);}
-
+    public Call<ArticleModel> getArticle(int id){return  articleGetService.getArticle(id); }
     public Call<ArticleModel> postArticle(long point, String text) {return articlePostService.postArticle(point, text);}
-    public Call<List<ArticleModel>> getAllCategory() {
-        return service.getAllCategory();
+    public Call<List<ArticleModel>> getArticles() {
+        return articlesGetservice.getArticles();
     }
 }

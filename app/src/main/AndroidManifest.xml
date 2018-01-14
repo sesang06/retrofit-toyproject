@@ -40,6 +40,12 @@
         <activity android:name=".PostActivity">
 
         </activity>
+        <activity android:name=".ArticleListActivity">
+
+        </activity>
+        <activity android:name=".ArticleDetailActivity">
+
+        </activity>
     </application>
 
 </manifest>

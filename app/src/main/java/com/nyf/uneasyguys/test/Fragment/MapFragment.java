@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -47,9 +48,16 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.nyf.uneasyguys.test.Model.ArticleModel;
 import com.nyf.uneasyguys.test.PostActivity;
 import com.nyf.uneasyguys.test.R;
+import com.nyf.uneasyguys.test.Service.ServiceHelper;
 
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.http.POST;
 
 import static android.app.Activity.RESULT_OK;
@@ -60,7 +68,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class MapFragment extends BaseFragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener , com.google.android.gms.location.LocationListener{
     private MapView mapView =null;
-    private Button addAddressButton;
+    private FloatingActionButton addAddressButton;
     private TextView addressTextView;
     private GoogleMap googleMap = null;
     private Marker currentMarker = null;
@@ -131,7 +139,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
             mapView = (MapView)rootView.findViewById(R.id.map);
             mapView.getMapAsync(this);
 
-            addAddressButton = (Button)rootView.findViewById(R.id.map_button);
+            addAddressButton = (FloatingActionButton) rootView.findViewById(R.id.map_button);
             addressTextView = (TextView)rootView.findViewById(R.id.map_address);
             addAddressButton.setOnClickListener(new View.OnClickListener() {
                                                     @Override
@@ -304,6 +312,22 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
                 location.setLongitude(latLng.longitude);
 
                 setCurrentLocation(location, "개발중", "개발중");
+
+            }
+        });
+
+        ServiceHelper.getInstance().getArticles().enqueue(new Callback<List<ArticleModel>>() {
+            @Override
+            public void onResponse(Call<List<ArticleModel>> call, Response<List<ArticleModel>> response) {
+                System.out.println(response.body().size());
+                List<ArticleModel> articleModels = response.body();
+                for (ArticleModel articleModel : articleModels){
+                    
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ArticleModel>> call, Throwable t) {
 
             }
         });

@@ -10,21 +10,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.nyf.uneasyguys.test.Model.ArticleModel;
 import com.nyf.uneasyguys.test.Service.ServiceHelper;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.view.View.*;
 
 /**
  * Created by sesan on 2017-12-29.

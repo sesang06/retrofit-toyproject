@@ -1,17 +1,13 @@
 package com.nyf.uneasyguys.test.Fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.SwipeDismissBehavior;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,9 +16,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nyf.uneasyguys.test.BaseAdapter;
-import com.nyf.uneasyguys.test.Fragment.BaseFragment;
 import com.nyf.uneasyguys.test.Model.ArticleModel;
-import com.nyf.uneasyguys.test.PostActivity;
 import com.nyf.uneasyguys.test.R;
 import com.nyf.uneasyguys.test.Service.ServiceHelper;
 
@@ -44,7 +38,7 @@ public class StatisticsFragment extends BaseFragment  implements OnMapReadyCallb
     private List<ArticleModel> articleModels;
     private SwipeRefreshLayout  mSwipeRefreshLayout;
     public void refresh(){
-        ServiceHelper.getInstance().getAllCategory().enqueue(new Callback<List<ArticleModel>>() {
+        ServiceHelper.getInstance().getArticles().enqueue(new Callback<List<ArticleModel>>() {
             @Override
             public void onResponse(Call<List<ArticleModel>> call, Response<List<ArticleModel>> response) {
                 System.out.println(response.body().size());
@@ -83,11 +77,18 @@ public class StatisticsFragment extends BaseFragment  implements OnMapReadyCallb
         mRecyclerView.setAdapter(mAdapter);
         mapView = (MapView)rootView.findViewById(R.id.map);
         mapView.getMapAsync(this);
+
         mSwipeRefreshLayout= (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_layout);
+
+
+
+
+
+
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                ServiceHelper.getInstance().getAllCategory().enqueue(new Callback<List<ArticleModel>>() {
+                ServiceHelper.getInstance().getArticles().enqueue(new Callback<List<ArticleModel>>() {
                     @Override
                     public void onResponse(Call<List<ArticleModel>> call, Response<List<ArticleModel>> response) {
                         System.out.println(response.body().size());
@@ -109,7 +110,7 @@ public class StatisticsFragment extends BaseFragment  implements OnMapReadyCallb
 
             }
         });
-        ServiceHelper.getInstance().getAllCategory().enqueue(new Callback<List<ArticleModel>>() {
+        ServiceHelper.getInstance().getArticles().enqueue(new Callback<List<ArticleModel>>() {
             @Override
             public void onResponse(Call<List<ArticleModel>> call, Response<List<ArticleModel>> response) {
                 System.out.println(response.body().size());
