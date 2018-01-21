@@ -8,10 +8,13 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
 
     <!--
         Camera permissions
     -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" />
@@ -28,6 +31,15 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBAuXMbOEEHYpf6R-ATMFsE_AY2_AJFt0c" />
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.nyf.uneasyguys.test"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/path"></meta-data>
+        </provider>
 
         <activity android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">

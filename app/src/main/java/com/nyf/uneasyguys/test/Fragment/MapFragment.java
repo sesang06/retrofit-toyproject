@@ -49,10 +49,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nyf.uneasyguys.test.Model.ArticleModel;
+import com.nyf.uneasyguys.test.Model.PointModel;
 import com.nyf.uneasyguys.test.PostActivity;
 import com.nyf.uneasyguys.test.R;
 import com.nyf.uneasyguys.test.Service.ServiceHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -69,6 +71,7 @@ import static android.app.Activity.RESULT_OK;
 public class MapFragment extends BaseFragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener , com.google.android.gms.location.LocationListener{
     private MapView mapView =null;
     private FloatingActionButton addAddressButton;
+    private FloatingActionButton refreshMarker;
     private TextView addressTextView;
     private GoogleMap googleMap = null;
     private Marker currentMarker = null;
@@ -90,6 +93,8 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
     private long point_x;
     private long point_y;
 
+    private ArrayList<Marker> markers;
+
 
     public void setCurrentLocation(Location location, String markerTitle, String markerSnippet) {
         if ( currentMarker != null ) currentMarker.remove();
@@ -107,8 +112,8 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
             currentMarker = this.googleMap.addMarker(markerOptions);
 
             this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
-            point_x = ((long) (location.getLongitude()* 100));
-            point_y = ((long) (location.getLatitude()* 100));
+            point_x = ((long) (location.getLongitude()* 1000000));
+            point_y = ((long) (location.getLatitude()* 1000000));
             addressTextView.setText("point_x : "+point_x+"point_y: "+point_y);
 
             return;
@@ -138,20 +143,30 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
                 R.layout.fragment_map, container, false);
             mapView = (MapView)rootView.findViewById(R.id.map);
             mapView.getMapAsync(this);
+        markers = new ArrayList<Marker>();
 
             addAddressButton = (FloatingActionButton) rootView.findViewById(R.id.map_button);
-            addressTextView = (TextView)rootView.findViewById(R.id.map_address);
-            addAddressButton.setOnClickListener(new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View view) {
-                                                        Intent intent = new Intent(getActivity(), PostActivity.class);
-                                                        intent.putExtra("point_x", point_x);
-                                                        intent.putExtra("point_y", point_y);
+        addAddressButton.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    Intent intent = new Intent(getActivity(), PostActivity.class);
+                                                    intent.putExtra("point_x", point_x);
+                                                    intent.putExtra("point_y", point_y);
 
-                                                                getActivity().startActivityForResult(intent, 1);
-                                                    }
+                                                    getActivity().startActivityForResult(intent, 1);
                                                 }
-            );
+                                            }
+        );
+
+        refreshMarker = (FloatingActionButton) rootView.findViewById(R.id.map_refresh);
+        refreshMarker.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                    drawMarkers();            }
+                                            }
+        );
+            addressTextView = (TextView)rootView.findViewById(R.id.map_address);
+
             PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                     getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
@@ -267,9 +282,33 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
             mapView.onCreate(savedInstanceState);
         }
     }
+    public void drawMarkers(){
+        ServiceHelper.getInstance().getArticles().enqueue(new Callback<List<ArticleModel>>() {
+            @Override
+            public void onResponse(Call<List<ArticleModel>> call, Response<List<ArticleModel>> response) {
+                System.out.println(response.body().size());
+                for (Marker marker : markers){
+                    marker.remove();
+                }
+                List<ArticleModel> articleModels = response.body();
+                for (ArticleModel articleModel : articleModels){
+                    PointModel pointModel = new PointModel(articleModel.getPointX(), articleModel.getPointY());
+                    System.out.println(pointModel.getLatitude()+ "latatat");
+                    markers.add(googleMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(pointModel.getLatitude(), pointModel.getLongitude()))
+                            .title(articleModel.getText())));
 
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ArticleModel>> call, Throwable t) {
+
+            }
+        });
+    }
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(final GoogleMap googleMap) {
         this.googleMap = googleMap;
         setCurrentLocation(null, "위치정보 가져올 수 없음","위치 권한과 GPS 활성 여부 확인");
         googleMap.getUiSettings().setCompassEnabled(true);
@@ -316,21 +355,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
             }
         });
 
-        ServiceHelper.getInstance().getArticles().enqueue(new Callback<List<ArticleModel>>() {
-            @Override
-            public void onResponse(Call<List<ArticleModel>> call, Response<List<ArticleModel>> response) {
-                System.out.println(response.body().size());
-                List<ArticleModel> articleModels = response.body();
-                for (ArticleModel articleModel : articleModels){
-                    
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<ArticleModel>> call, Throwable t) {
-
-            }
-        });
+     drawMarkers();
             /*
         LatLng SEOUL = new LatLng(37.56, 126.97);
         MarkerOptions markerOptions = new MarkerOptions();

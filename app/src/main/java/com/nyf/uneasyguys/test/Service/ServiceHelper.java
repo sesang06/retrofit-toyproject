@@ -7,7 +7,10 @@ package com.nyf.uneasyguys.test.Service;
         import java.util.List;
 
         import okhttp3.Credentials;
+        import okhttp3.MediaType;
+        import okhttp3.MultipartBody;
         import okhttp3.OkHttpClient;
+        import okhttp3.RequestBody;
         import okhttp3.logging.HttpLoggingInterceptor;
         import retrofit2.Call;
         import retrofit2.Retrofit;
@@ -63,12 +66,17 @@ public class ServiceHelper {
                 .addConverterFactory(GsonConverterFactory.create());
     }
 
-    public Call<String> postPoint(int point_x, int point_y) {
+  /*  public Call<String> postPoint(int point_x, int point_y) {
         PointModel pointModel = new PointModel(point_x,point_y);
-        String object = gson.toJson(pointModel);
-        return pointPostService.postPoint(point_x,point_y);}
+
+        return pointPostService.postPoint(point_x,point_y,pointModel.getPointN(), pointModel.getPointE(), pointModel.getPointW(), pointModel.getPointS());}*/
     public Call<ArticleModel> getArticle(int id){return  articleGetService.getArticle(id); }
-    public Call<ArticleModel> postArticle(long point, String text) {return articlePostService.postArticle(point, text);}
+    public Call<ArticleModel> postArticle(long point_x, long point_y, String uploadText, MultipartBody.Part image) {
+        PointModel pointModel = new PointModel(point_x,point_y);
+        RequestBody text = RequestBody.create(MediaType.parse("text/plain"), uploadText);
+
+
+        return articlePostService.postArticle(point_x,point_y,text,pointModel.getPointN(),pointModel.getPointE(), pointModel.getPointW(), pointModel.getPointS(), image);}
     public Call<List<ArticleModel>> getArticles() {
         return articlesGetservice.getArticles();
     }

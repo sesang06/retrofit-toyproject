@@ -22,13 +22,32 @@
             />
 
     </LinearLayout>
-    <EditText
-        android:id="@+id/post_edit_text"
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="top|start"
-        android:layout_margin="5dp"
-        android:textSize="15sp"
-        android:hint="무슨 생각을 하고 계신가요?"
-        android:layout_weight="1"/>
+        android:layout_height="fill_parent"
+        android:layout_weight="1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <EditText
+                android:id="@+id/post_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="top|start"
+                android:layout_margin="5dp"
+                android:textSize="15sp"
+                android:hint="무슨 생각을 하고 계신가요?"
+                android:layout_weight="1"/>
+            <ImageView
+                android:id="@+id/post_image"
+                android:scaleType="centerCrop"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+
 </LinearLayout>

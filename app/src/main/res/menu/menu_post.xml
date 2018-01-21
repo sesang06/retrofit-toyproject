@@ -5,11 +5,21 @@
     tools:context=".PostActivity">
 
     <item
+        android:id="@+id/menu_camera"
+        android:orderInCategory="100"
+        android:title="카메라"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/menu_photo"
+        android:orderInCategory="100"
+        android:title="사진"
+        app:showAsAction="always"
+        />
+    <item
         android:id="@+id/menu_post"
         android:orderInCategory="100"
         android:title="저장"
         app:showAsAction="always"
         />
-
-
 </menu>

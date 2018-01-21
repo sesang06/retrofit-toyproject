@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.nyf.uneasyguys.test.Fragment.MapFragment;
 import com.nyf.uneasyguys.test.Fragment.StatisticsFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,8 +22,18 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 1) {
 
             if (resultCode == RESULT_OK) {
+                /*if (mBaseFragmentStatePagerAdapter != null){
+                    if ( mBaseFragmentStatePagerAdapter.getItem(1)!= null){
+                        if (mBaseFragmentStatePagerAdapter.getItem(1) instanceof MapFragment){
+                            ((MapFragment)mBaseFragmentStatePagerAdapter.getItem(1) ).drawMarkers();
+                        }
+                    }
 
+                }*/
+                //mViewPager.setCurrentItem(1);
+               // ((MapFragment)mBaseFragmentStatePagerAdapter.getCurrentFragment() ).drawMarkers();
                 mViewPager.setCurrentItem(2);
+
                 ((StatisticsFragment)mBaseFragmentStatePagerAdapter.getCurrentFragment()).refresh();
 
             }

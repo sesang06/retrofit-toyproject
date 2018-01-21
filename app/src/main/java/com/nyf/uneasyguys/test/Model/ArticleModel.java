@@ -19,6 +19,8 @@ public class ArticleModel {
     private String updated_time;
     private String image;
     private String user;
+    private long point_x;
+    private long point_y;
     public String getUser(){
         return user;
     }
@@ -35,6 +37,9 @@ public class ArticleModel {
      }
     public String getText(){return text;}
     public long getPoint(){return point;}
+
+    public long getPointX(){return point_x;}
+    public long getPointY(){return point_y;}
 
     public ArticleModel(String text){
         this.text = text;
