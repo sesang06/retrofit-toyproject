@@ -46,6 +46,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nyf.uneasyguys.test.Model.ArticleModel;
@@ -94,7 +95,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
     private long point_y;
 
     private ArrayList<Marker> markers;
-
+    private ArrayList<Marker> statisticsMarkers;
 
     public void setCurrentLocation(Location location, String markerTitle, String markerSnippet) {
         if ( currentMarker != null ) currentMarker.remove();
@@ -144,6 +145,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
             mapView = (MapView)rootView.findViewById(R.id.map);
             mapView.getMapAsync(this);
         markers = new ArrayList<Marker>();
+        statisticsMarkers = new ArrayList<Marker>();
 
             addAddressButton = (FloatingActionButton) rootView.findViewById(R.id.map_button);
         addAddressButton.setOnClickListener(new View.OnClickListener() {
@@ -162,7 +164,9 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
         refreshMarker.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
-                                    drawMarkers();            }
+                                    drawMarkers();
+                                    drawStatisticsMarkers();
+                                                }
                                             }
         );
             addressTextView = (TextView)rootView.findViewById(R.id.map_address);
@@ -307,6 +311,38 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
             }
         });
     }
+
+    public void drawStatisticsMarkers(){
+        LatLngBounds curScreen = googleMap.getProjection().getVisibleRegion().latLngBounds;
+        int top = ((int) (curScreen.northeast.latitude * 100)) * 10000;
+        int bottom = ((int) (curScreen.southwest.latitude * 100 + 0.5)) * 10000;
+        int right = ((int) (curScreen.northeast.longitude * 100)) * 10000;
+        int left = ((int) (curScreen.southwest.longitude * 100 + 0.5)) * 10000;
+        Log.d("drawStatistics", "curScreen"+top+" "+bottom+" "+right+" "+left);
+
+        for (Marker marker : statisticsMarkers)
+            marker.remove();
+
+        for (int y = bottom; y <= top; y += 10000)
+            for (int x = left; x <= right; x += 10000)
+                ServiceHelper.getInstance().getPoint((long)x * 1000000000 + y).enqueue(new Callback<PointModel>() {
+                    @Override
+                    public void onResponse(Call<PointModel> call, Response<PointModel> response) {
+                        Log.d("drawStatistics", "success");
+                        PointModel pointModel = response.body();
+                        Log.d("drawStatistics", ""+pointModel.getLatitude()+" "+pointModel.getLongitude());
+                        statisticsMarkers.add(googleMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(pointModel.getLatitude(), pointModel.getLongitude()))
+                                .title("Sample!"+pointModel.getDanger()+" "+pointModel.getSafe())));
+                    }
+
+                    @Override
+                    public void onFailure(Call<PointModel> call, Throwable t) {
+                        Log.d("drawStatistics", "fail");
+                    }
+                });
+    }
+
     @Override
     public void onMapReady(final GoogleMap googleMap) {
         this.googleMap = googleMap;
@@ -356,6 +392,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
         });
 
      drawMarkers();
+     drawStatisticsMarkers();
             /*
         LatLng SEOUL = new LatLng(37.56, 126.97);
         MarkerOptions markerOptions = new MarkerOptions();

@@ -31,6 +31,8 @@ public class ServiceHelper {
     private ArticlePostService articlePostService;
     private PointPostService pointPostService;
     private ArticleGetService articleGetService;
+    private PointGetService pointGetService;
+    private PointsGetService pointsGetService;
     private ServiceHelper() {
 
         Retrofit retrofit = createAdapter().build();
@@ -38,6 +40,8 @@ public class ServiceHelper {
         articlePostService = retrofit.create(ArticlePostService.class);
         pointPostService = retrofit.create(PointPostService.class);
         articleGetService = retrofit.create(ArticleGetService.class);
+        pointGetService = retrofit.create(PointGetService.class);
+        pointsGetService = retrofit.create(PointsGetService.class);
 
     }
 
@@ -80,4 +84,6 @@ public class ServiceHelper {
     public Call<List<ArticleModel>> getArticles() {
         return articlesGetservice.getArticles();
     }
+    public Call<PointModel> getPoint(long id){return pointGetService.getPoint(id);}
+    public Call<List<PointModel>> getPoints(){return pointsGetService.getPoints();}
 }
