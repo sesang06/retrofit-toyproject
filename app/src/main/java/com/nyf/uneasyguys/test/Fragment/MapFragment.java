@@ -1,11 +1,16 @@
 package com.nyf.uneasyguys.test.Fragment;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -17,11 +22,13 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -323,17 +330,22 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
         for (Marker marker : statisticsMarkers)
             marker.remove();
 
+        // TODO need backend support
         for (int y = bottom; y <= top; y += 10000)
             for (int x = left; x <= right; x += 10000)
                 ServiceHelper.getInstance().getPoint((long)x * 1000000000 + y).enqueue(new Callback<PointModel>() {
                     @Override
                     public void onResponse(Call<PointModel> call, Response<PointModel> response) {
-                        Log.d("drawStatistics", "success");
-                        PointModel pointModel = response.body();
-                        Log.d("drawStatistics", ""+pointModel.getLatitude()+" "+pointModel.getLongitude());
-                        statisticsMarkers.add(googleMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(pointModel.getLatitude(), pointModel.getLongitude()))
-                                .title("Sample!"+pointModel.getDanger()+" "+pointModel.getSafe())));
+                        if (response.isSuccessful()) {
+                            PointModel pointModel = response.body();
+                            Log.d("drawStatistics", "" + pointModel.getLatitude() + " " + pointModel.getLongitude());
+                            statisticsMarkers.add(googleMap.addMarker(new MarkerOptions()
+                                    .position(new LatLng(pointModel.getLatitude(), pointModel.getLongitude()))
+                                    .title("Sample!" + pointModel.getDanger() + " " + pointModel.getSafe())
+                                    .icon(BitmapDescriptorFactory.fromBitmap(createStatisticMarker(pointModel.getSafe(),pointModel.getDanger())))));
+                        } else {
+                            Log.d("drawStatistics", response.errorBody().toString());
+                        }
                     }
 
                     @Override
@@ -544,7 +556,36 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback, Goo
 
     }
 
+    public Bitmap createStatisticMarker(int safe, int danger) {
+        // make text marker layout
+        Activity activity = getActivity();
+        LinearLayout layout = new LinearLayout(activity);
+        TextView safeText = new TextView(activity);
+        TextView midText = new TextView(activity);
+        TextView dangerText = new TextView(activity);
+        safeText.setText(Integer.toString(safe));
+        safeText.setTextColor(Color.GREEN);
+        midText.setText("/");
+        dangerText.setText(Integer.toString(danger));
+        dangerText.setTextColor(Color.RED);
+        layout.addView(safeText);
+        layout.addView(midText);
+        layout.addView(dangerText);
 
+        // to bitmap
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        layout.measure(displayMetrics.widthPixels, displayMetrics.heightPixels);
+        layout.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels);
+        layout.buildDrawingCache();
+        Bitmap bitmap = Bitmap.createBitmap(layout.getMeasuredWidth(), layout.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(bitmap);
+        layout.draw(canvas);
+
+        return bitmap;
+    }
 
 
 
