@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.nyf.uneasyguys.test">
+    package="com.sesang06.retrofit.test">
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -30,10 +30,10 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBAuXMbOEEHYpf6R-ATMFsE_AY2_AJFt0c" />
+            android:value="AIzaSyBdVl-cTICSwYKrZ95SuvNw7dbMuDt1KG0" />
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.nyf.uneasyguys.test"
+            android:authorities="com.sesang06.retrofit.test"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
